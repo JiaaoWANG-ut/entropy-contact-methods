@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Large GPUMD trajectory runs (keep setup scripts + models only)
+FIG4-yimin-paper/FIG4-run/NiO-*/
+
+# Analysis outputs (regenerate with the scripts)
+FIG4-yimin-paper/entropy_analysis/
+FIG4-yimin-paper/entropy_analysis_*/
+FIG4-yimin-paper/entropy_frame_index/
+FIG4-yimin-paper/contact_analysis/
+FIG4-yimin-paper/*.zip
+FIG4-yimin-paper/*.log
+FIG4-yimin-paper/.release_assets/
+
+# OVITO rendered media (scripts stay; PNGs live in the figures release)
+FIG4-yimin-paper/ovito-figures/frames/
+FIG4-yimin-paper/ovito-figures/png/
+FIG4-yimin-paper/ovito-figures/summary/
+FIG4-yimin-paper/ovito-figures/logs/
+FIG4-yimin-paper/ovito-figures/*.png
+FIG4-yimin-paper/ovito-figures/*.jpg
