@@ -193,9 +193,9 @@ def build_message(subject: str, body: str, attachments):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", default=os.path.join(ROOT, "entropy_analysis"))
-    parser.add_argument("--zip-name", default="FIG4_entropy_analysis.zip")
+    parser.add_argument("--zip-name", default="entropy_analysis.zip")
     parser.add_argument("--subject", default=(
-        "FIG4 NiO-6/NiO-8 entropy analysis: S_atom and S_config vs time "
+        "Entropy analysis (example NiO systems): S_atom and S_config vs time "
         "(1500-3000 K)"))
     parser.add_argument("--body-file", default=None)
     parser.add_argument("--dry-run", action="store_true")

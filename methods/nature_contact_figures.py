@@ -405,7 +405,7 @@ cluster in the companion entropy analysis.
 def write_email_body():
     text = """Dear all,
 
-Metal-on-Ni wetting analysis for the FIG4 NEP89 runs (NiO-6 / NiO-8 + Fe, Zn,
+Metal-on-Ni wetting analysis for example NEP89 runs (NiO-6 / NiO-8 + Fe, Zn,
 Cr, Ru). Nature-format figures, captions, and the original plotting tables are
 on GitHub Releases (link below). This note is the figure explanation.
 
@@ -465,7 +465,7 @@ def write_release_notes(url_placeholder: str = ""):
     path = os.path.join(NATURE_DIR, "RELEASE_NOTES.md")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(
-            "Nature-format metal–Ni wetting figures for the FIG4 GPUMD runs "
+            "Nature-format metal–Ni wetting figures for the example GPUMD runs "
             "(NEP89, NVT-Langevin, dt = 1 fs, dump every 0.4 ps).\n\n"
             "Metric\n"
             f"- Contact: X–Ni neighbours within {MET_CUT} Å, oxygen excluded\n"
@@ -479,7 +479,7 @@ def write_release_notes(url_placeholder: str = ""):
             "- Fig3_wetting_kinetics.pdf/.png/.svg\n"
             "- Fig1-3_source_data.xlsx  (README + long + wide tables)\n"
             "- figure_captions.txt\n"
-            "- FIG4_wetting_nature.zip  (all of the above)\n"
+            "- wetting_nature.zip  (all of the above)\n"
         )
     print(f"Saved: {path}")
     return path

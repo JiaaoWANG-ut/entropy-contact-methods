@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figures and plot-ready tables for the FIG4 entropy analysis."""
+"""Figures and plot-ready tables for the entropy analysis."""
 
 from __future__ import annotations
 

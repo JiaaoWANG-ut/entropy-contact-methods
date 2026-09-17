@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert FIG4 CIFs to GPUMD model.xyz and write per-T run directories."""
+"""Convert example CIFs to GPUMD model.xyz and write per-T run directories."""
 from __future__ import print_function
 import os
 from collections import Counter
@@ -145,7 +145,7 @@ def main():
     submit_all = os.path.join(ROOT, "submit_all.sh")
     with open(submit_all, "w") as f:
         f.write("#!/bin/bash\n")
-        f.write("# Submit all 10 FIG4 NEP89 jobs. Review first; do not run blindly.\n")
+        f.write("# Submit all example NEP89 jobs. Review first; do not run blindly.\n")
         f.write("set -e\n")
         f.write("ROOT=%s\n" % ROOT)
         for rundir in all_runs:

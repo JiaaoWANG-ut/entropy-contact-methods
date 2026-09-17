@@ -4,7 +4,7 @@ from __future__ import print_function
 import os
 import sys
 
-ROOT = "/public/home/jwang/test/testgpumd/production-run/FIG4-run"
+ROOT = "/public/home/jwang/test/testgpumd/production-run/runs"
 OUT = "/public/home/jwang/test/testgpumd/ovito-figures/frames"
 COMPS = ["NiO-6-Fe-Zn-Cr-Ru", "NiO-8-Fe-Zn-Cr-Ru"]
 TEMPS = ["1500K", "1800K", "2000K", "2500K", "3000K"]

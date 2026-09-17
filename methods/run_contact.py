@@ -51,7 +51,7 @@ MAX_PS = 5000.0
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(ROOT, "contact_analysis")
 DATA_DIR = os.path.join(OUT_DIR, "data")
-MODEL_DIR = os.path.join(ROOT, "FIG4-run", "models")
+MODEL_DIR = os.path.join(ROOT, "runs", "models")
 
 
 def log_frame_picks(n_frames: int, max_ps: float = MAX_PS) -> np.ndarray:
@@ -562,7 +562,7 @@ def write_notes(rows):
     path = os.path.join(OUT_DIR, "NOTES.md")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(
-            "Metal–Ni wetting contact analysis (FIG4 GPUMD / NEP89)\n\n"
+            "Metal–Ni wetting contact analysis (GPUMD / NEP89)\n\n"
             f"Cutoff: metal–metal < {MET_CUT} A, oxygen excluded.\n"
             "Contact ratio of element X: fraction of X metal atoms with ≥1 Ni neighbour.\n"
             f"Contact area A_c = n_contact × {AREA_PER_ATOM:.2f} Å² "

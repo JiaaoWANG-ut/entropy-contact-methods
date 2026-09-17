@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Nature Fig. 4: selecting a morphological stopping point."""
+"""Select a morphological stopping point from contact + entropy kinetics."""
 
 from __future__ import annotations
 
@@ -349,7 +349,7 @@ def build():
         stage_colors=[STAGE_EDGE[1], STAGE_EDGE[2], STAGE_EDGE[3], STAGE_EDGE[3]],
     )
 
-    stem = os.path.join(OUT, "Fig4_stopping_point")
+    stem = os.path.join(OUT, "stopping_point")
     for ext in ("png", "pdf", "svg"):
         fig.savefig(f"{stem}.{ext}")
         print("Saved", f"{stem}.{ext}")

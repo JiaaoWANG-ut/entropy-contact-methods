@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=ovito-fig4
+#SBATCH --job-name=ovito-render
 #SBATCH --partition=debug
 #SBATCH --nodelist=dcu4
 #SBATCH --nodes=1

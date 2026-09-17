@@ -1,41 +1,42 @@
-# FIG4 NiO–Fe/Zn/Cr/Ru: entropy & contact analysis
+# General methods: entropy & metal–metal contact analysis
 
-Python tools for post-processing **GPUMD** extended-XYZ trajectories of
-high-entropy oxide particle systems used in Nature Fig. 4–style wetting /
-morphology analysis.
+Reusable Python methods for post-processing **GPUMD** extended-XYZ
+trajectories of multi-metal / oxide nanoparticle systems:
 
-**Companion figure pack (OVITO PNGs):**  
-[FIG4-NiO-FeZnCrRu-figures](https://github.com/JiaaoWANG-ut/FIG4-NiO-FeZnCrRu-figures)
+1. **Atomic entropy** \(S_\mathrm{atom}\) and **configurational entropy**
+   \(S_\mathrm{config}\) vs time  
+2. **Contact ratio / contact-area** metrics for metal–metal wetting  
+3. Optional figure builders and OVITO helpers  
 
-| Systems | Temperatures | Protocol |
-|---------|--------------|----------|
-| `NiO-6-Fe-Zn-Cr-Ru`, `NiO-8-Fe-Zn-Cr-Ru` | 1500, 1800, 2000, 2500, 3000 K | NEP89, NVT-Langevin, `dt = 1 fs`, dump every 400 steps (0.4 ps) |
+The core algorithms live under `methods/`. Example structures and run-layout
+helpers are included so you can reproduce an end-to-end workflow; swap in
+your own systems by editing the `SYSTEMS` / temperature lists in the drivers.
 
 ---
 
 ## Repository layout
 
 ```
-FIG4-paper/
+methods/
   traj_entropy.py          # Core: S_atom / S_config from dump.xyz
   run_entropy.py           # Batch entropy driver + CLI
   entropy_report.py        # Entropy tables & plots
   run_contact.py           # Metal–Ni contact ratio / area
   nature_contact_figures.py
-  fig4_stopping_point.py   # Morphological stage / stopping-point figure
-  send_report.py           # Optional: email result zip (needs Gmail app password)
-  check_sent.py            # Optional: IMAP check of Sent folder
-  FIG4-run/
+  stopping_point.py        # Morphological stage / stopping-point figure
+  send_report.py           # Optional: email result zip
+  check_sent.py            # Optional: IMAP Sent check
+  runs/
     setup_runs.py          # CIF → model.xyz + per-T run.in / submit scripts
     submit_all.sh
-    models/*.xyz           # Initial structures
+    models/*.xyz           # Example initial structures
     *.cif
   ovito-figures/           # Frame extract / Tachyon render / stitch scripts
 ```
 
-Trajectory dumps (`FIG4-run/<system>/<T>K/dump.xyz`) are **not** shipped
-(they are hundreds of GB). Place them locally in the layout above before running
-analysis.
+Trajectory dumps (`runs/<system>/<T>K/dump.xyz`) are **not** shipped.
+Place them locally in that layout (or point the drivers at your paths)
+before running analysis.
 
 ---
 
@@ -45,12 +46,11 @@ analysis.
 pip install -r requirements.txt
 ```
 
-Python 3.10+ recommended. No GPUMD needed for analysis if `dump.xyz` files
-already exist.
+Python 3.10+ recommended. GPUMD is not required once `dump.xyz` files exist.
 
 ---
 
-## Methods (short)
+## Methods
 
 ### Atomic entropy \(S_\mathrm{atom}\)
 
@@ -75,42 +75,42 @@ p_c = n_c / N_\mathrm{metal}
 
 ### Contact / wetting metrics
 
-For each metal X ∈ {Fe, Zn, Cr, Ru}: an X atom contacts Ni if it has ≥1 Ni
-neighbour within 3.0 Å. Contact ratio \(\rho = n_\mathrm{contact}/N_X\);
-contact area uses a close-packed atomic area proxy. Frames with high Ni
-coordination (alloyed / fused) are flagged so area is not misread as wetting.
+For each secondary metal X (example set: Fe, Zn, Cr, Ru), an X atom contacts
+Ni if it has ≥1 Ni neighbour within 3.0 Å. Contact ratio
+\(\rho = n_\mathrm{contact}/N_X\); contact area uses a close-packed atomic
+area proxy. Frames with high Ni coordination (alloyed / fused) are flagged
+so area is not misread as wetting.
 
-Entropy uses **400** uniformly spaced frames per trajectory. Contact uses
-**log-spaced** frames denser in 0–1 ns (window 0–5 ns by default).
+Default sampling: **400** uniformly spaced frames for entropy; **log-spaced**
+frames (denser in 0–1 ns) for contact, window 0–5 ns.
+
+These cutoffs and element lists are constants at the top of the modules —
+change them for other chemistries.
 
 ---
 
 ## Usage
 
-All analysis commands are run from `FIG4-paper/`:
-
 ```bash
-cd FIG4-paper
+cd methods
 ```
 
 ### 0. (Optional) Prepare GPUMD run directories
 
-Edit the `POTENTIAL` path in `FIG4-run/setup_runs.py` for your machine, then:
+Edit the `POTENTIAL` path in `runs/setup_runs.py` for your machine, then:
 
 ```bash
-python FIG4-run/setup_runs.py
-# then submit jobs via FIG4-run/submit_all.sh (cluster-specific)
+python runs/setup_runs.py
+# then submit via runs/submit_all.sh (cluster-specific)
 ```
 
 Expected dump path after MD:
 
 ```text
-FIG4-run/<system>/<temp>K/dump.xyz
+runs/<system>/<temp>K/dump.xyz
 ```
 
 ### 1. Entropy vs time
-
-Full trajectories:
 
 ```bash
 python run_entropy.py --workers 10
@@ -122,8 +122,6 @@ First 5 ns only (writes to `entropy_analysis_5ns/`):
 python run_entropy.py --tag 5ns --max-ps 5000 --workers 10
 ```
 
-Useful flags:
-
 | Flag | Meaning |
 |------|---------|
 | `--workers N` | Parallel processes (default 10) |
@@ -132,14 +130,12 @@ Useful flags:
 | `--max-ps X` | Analyse only the first `X` picoseconds |
 | `--tag NAME` | Output dir `entropy_analysis_NAME/` |
 
-**Outputs** (under `entropy_analysis/` or `entropy_analysis_<tag>/`):
+**Outputs** under `entropy_analysis/` or `entropy_analysis_<tag>/`:
 
-- `data/<system>_<T>K.npz` — per-trajectory tables  
-- `entropy_raw_long.csv`, `*_Satom_wide.csv`, `*_Sconfig_wide.csv`  
-- `entropy_tables.xlsx`, PNG/SVG figures  
+- `data/<system>_<T>K.npz`
+- `entropy_raw_long.csv`, wide CSVs, `entropy_tables.xlsx`, PNG/SVG figures
 
-Frame byte-offset caches are shared in `entropy_frame_index/` (safe to delete;
-they are rebuilt automatically).
+Frame byte-offset caches live in `entropy_frame_index/` (safe to delete).
 
 ### 2. Contact ratio & contact area
 
@@ -149,48 +145,36 @@ python run_contact.py --workers 10
 python run_contact.py --plot-only
 ```
 
-**Outputs** under `contact_analysis/`:
+**Outputs** under `contact_analysis/`.
 
-- `data/*.npz`, `contact_raw_long.csv`, `contact_summary.csv`  
-- PNG/SVG overview and per-system plots  
-
-### 3. Nature-format contact figures
-
-Requires step 2 results:
+### 3. Publication-style contact figures
 
 ```bash
 python nature_contact_figures.py
 ```
 
-Writes to `contact_analysis/nature/` (Fig. 1–3 style plots, source Excel,
-captions).
+Writes plots, source Excel, and captions to `contact_analysis/nature/`.
 
-### 4. Morphological stopping-point figure (Fig. 4 panel)
+### 4. Morphological stopping-point figure
 
-Needs contact caches **and** entropy CSV (default:
-`entropy_analysis_5ns/entropy_raw_long.csv`), plus OVITO snapshot PNGs.
-Edit `PNG_ROOT` in `fig4_stopping_point.py` if your PNG path differs
-(default points at a local `ovito-figures/png` tree).
+Needs contact caches, an entropy CSV (default
+`entropy_analysis_5ns/entropy_raw_long.csv`), and snapshot PNGs.
+Edit `PNG_ROOT` in `stopping_point.py` if needed.
 
 ```bash
-python fig4_stopping_point.py
+python stopping_point.py
 ```
 
 ### 5. OVITO rendering (optional)
 
-Scripts under `ovito-figures/` extract frames, render with Tachyon, and stitch
-T–time grids. See `ovito-figures/README.md`. Pre-rendered packs are published
-on the [figures release](https://github.com/JiaaoWANG-ut/FIG4-NiO-FeZnCrRu-figures/releases).
+See `ovito-figures/README.md` for extract / Tachyon / stitch scripts.
 
 ### 6. Email a result bundle (optional)
 
 ```bash
-export GMAIL_APP_PASSWORD='xxxx'   # Google app password, not account password
+export GMAIL_APP_PASSWORD='xxxx'
 python send_report.py --dir entropy_analysis_5ns
 ```
-
-Uses IMAP to avoid duplicate sends on flaky egress. Inspect Sent with
-`python check_sent.py`.
 
 ---
 
@@ -207,7 +191,7 @@ GPUMD dumps ready
        │
        ├──────────►  nature_contact_figures.py
        │
-       └──────────►  fig4_stopping_point.py  (also needs entropy CSV + PNGs)
+       └──────────►  stopping_point.py
 ```
 
 ---
@@ -224,7 +208,11 @@ GPUMD dumps ready
 
 ---
 
-## License / citation
+## Example systems shipped with the helpers
 
-Analysis code for internal manuscript preparation. Cite the manuscript and the
-NEP89 potential when publishing results derived from these trajectories.
+| Systems | Temperatures | Protocol |
+|---------|--------------|----------|
+| `NiO-6-Fe-Zn-Cr-Ru`, `NiO-8-Fe-Zn-Cr-Ru` | 1500–3000 K | NEP89, NVT-Langevin, `dt = 1 fs`, dump every 0.4 ps |
+
+Adapt `SYSTEMS` and `TEMPERATURES` in `run_entropy.py` / `run_contact.py` for
+your own runs.

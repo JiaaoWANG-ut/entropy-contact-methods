@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Driver: atomic and configurational entropy vs time for all FIG4 GPUMD runs.
+Driver: atomic and configurational entropy vs time for GPUMD runs.
 
-Systems   : NiO-6-Fe-Zn-Cr-Ru, NiO-8-Fe-Zn-Cr-Ru
-Temperatures: 1500, 1800, 2000, 2500, 3000 K
+Example systems : NiO-6-Fe-Zn-Cr-Ru, NiO-8-Fe-Zn-Cr-Ru
+Temperatures    : 1500, 1800, 2000, 2500, 3000 K
 Per trajectory 400 uniformly spaced frames are analysed (see traj_entropy.py).
 
 Outputs (in entropy_analysis/):
@@ -30,7 +30,7 @@ import numpy as np
 import traj_entropy as TE
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-RUN_ROOT = os.path.join(ROOT, "FIG4-run")
+RUN_ROOT = os.path.join(ROOT, "runs")
 SYSTEMS = ("NiO-6-Fe-Zn-Cr-Ru", "NiO-8-Fe-Zn-Cr-Ru")
 TEMPERATURES = (1500, 1800, 2000, 2500, 3000)
 N_SAMPLE = 400
