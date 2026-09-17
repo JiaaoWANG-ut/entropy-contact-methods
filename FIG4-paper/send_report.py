@@ -27,7 +27,6 @@ APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
 RECIPIENTS = [
     "lq.wang@utoronto.ca",
     "xue.yao@utoronto.ca",
-    "yimin.wu@uwaterloo.ca",
     "wangjiaao0720@utexas.edu",
 ]
 

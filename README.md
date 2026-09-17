@@ -16,7 +16,7 @@ morphology analysis.
 ## Repository layout
 
 ```
-FIG4-yimin-paper/
+FIG4-paper/
   traj_entropy.py          # Core: S_atom / S_config from dump.xyz
   run_entropy.py           # Batch entropy driver + CLI
   entropy_report.py        # Entropy tables & plots
@@ -87,10 +87,10 @@ Entropy uses **400** uniformly spaced frames per trajectory. Contact uses
 
 ## Usage
 
-All analysis commands are run from `FIG4-yimin-paper/`:
+All analysis commands are run from `FIG4-paper/`:
 
 ```bash
-cd FIG4-yimin-paper
+cd FIG4-paper
 ```
 
 ### 0. (Optional) Prepare GPUMD run directories
