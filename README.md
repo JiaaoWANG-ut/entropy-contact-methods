@@ -3,10 +3,10 @@
 Reusable Python methods for post-processing **GPUMD** extended-XYZ
 trajectories of multi-metal / oxide nanoparticle systems:
 
-1. **Atomic entropy** \(S_\mathrm{atom}\) and **configurational entropy**
-   \(S_\mathrm{config}\) vs time  
-2. **Contact ratio / contact-area** metrics for metal–metal wetting  
-3. Optional figure builders and OVITO helpers  
+1. **Atomic entropy** $S_{\mathrm{atom}}$ and **configurational entropy**
+   $S_{\mathrm{config}}$ vs time
+2. **Contact ratio / contact-area** metrics for metal–metal wetting
+3. Optional figure builders and OVITO helpers
 
 The core algorithms live under `methods/`. Example structures and run-layout
 helpers are included so you can reproduce an end-to-end workflow; swap in
@@ -52,32 +52,32 @@ Python 3.10+ recommended. GPUMD is not required once `dump.xyz` files exist.
 
 ## Methods
 
-### Atomic entropy \(S_\mathrm{atom}\)
+### Atomic entropy $S_{\mathrm{atom}}$
 
 Each atom is labelled by motif `(species, CN_O, CN_M)`:
 
 - `CN_O`: O neighbours within **2.5 Å**
 - `CN_M`: metal neighbours within **3.0 Å**
 
-\[
-S_\mathrm{atom} = -\sum_k p_k \ln p_k \quad (\mathrm{nats}),\quad
-p_k = N_k / N_\mathrm{atoms}
-\]
+$$
+S_{\mathrm{atom}} = -\sum_k p_k \ln p_k \quad (\mathrm{nats}),\quad
+p_k = N_k / N_{\mathrm{atoms}}
+$$
 
-### Configurational entropy \(S_\mathrm{config}\)
+### Configurational entropy $S_{\mathrm{config}}$
 
-Metal atoms (O excluded) form clusters with contacts \< **3.0 Å** (PBC).
+Metal atoms (O excluded) form clusters with contacts &lt; **3.0 Å** (PBC).
 
-\[
-S_\mathrm{config} = -\sum_c p_c \ln p_c,\quad
-p_c = n_c / N_\mathrm{metal}
-\]
+$$
+S_{\mathrm{config}} = -\sum_c p_c \ln p_c,\quad
+p_c = n_c / N_{\mathrm{metal}}
+$$
 
 ### Contact / wetting metrics
 
 For each secondary metal X (example set: Fe, Zn, Cr, Ru), an X atom contacts
 Ni if it has ≥1 Ni neighbour within 3.0 Å. Contact ratio
-\(\rho = n_\mathrm{contact}/N_X\); contact area uses a close-packed atomic
+$\rho = n_{\mathrm{contact}}/N_X$; contact area uses a close-packed atomic
 area proxy. Frames with high Ni coordination (alloyed / fused) are flagged
 so area is not misread as wetting.
 
@@ -202,7 +202,7 @@ GPUMD dumps ready
 |--------|-------|------|
 | `O_CUT` | 2.5 Å | First O shell (`traj_entropy`) |
 | `MET_CUT` | 3.0 Å | Metal–metal contact / cluster link |
-| `AREA_PER_ATOM` | ~5.41 Å² | Close-packed area for \(d_\mathrm{nn}=2.50\) Å |
+| `AREA_PER_ATOM` | ~5.41 Å² | Close-packed area for $d_{\mathrm{nn}}=2.50$ Å |
 | `ALLOY_CN` | 4 | Ni CN ≥ 4 → fused / alloyed flag |
 | `N_SAMPLE` | 400 | Entropy frame subsample |
 
